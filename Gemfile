@@ -33,8 +33,10 @@ gem 'bcrypt', '~> 3.1.7'
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'factory_girl_rails'
   gem 'pry'
+  gem 'database_cleaner'
+  gem 'shoulda-matchers', github: 'thoughtbot/shoulda-matchers'
+  gem "factory_girl_rails", "~>4.0"
 end
 
 group :development do
