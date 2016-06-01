@@ -79,4 +79,29 @@ describe "Merchant" do
     expect(result.first["name"]).to eq "Venice"
     expect(result.last["name"]).to eq "Venice"
   end
+
+  it "returns all items belonging to a merchant" do
+    merchant1, merchant2 = create_list(:merchant, 2)
+    merchant1.items.create(name: "lemon", description: "lemony", unit_price: 10.00)
+    merchant1.items.create(name: "coriander", description: "corianderish", unit_price: 10.00)
+    merchant2.items.create(name: "coxinha", description: "chickeny", unit_price: 50.00)
+
+    get "/api/v1/merchants/#{merchant1.id}/items"
+
+    items = JSON.parse(response.body)
+
+    expect(items.count).to eq 2
+  end
+
+  it "returns all invoices belonging to a merchant" do
+    merchant1, merchant2 = create_list(:merchant, 2)
+    customer1, customer2 = create_list(:customer, 2)
+    customer1.invoices.create(merchant_id: merchant1.id)
+    customer2.invoices.create(merchant_id: merchant2.id)
+
+    get "/api/v1/merchants/#{merchant1.id}/invoices"
+
+    invoices = JSON.parse(response.body)
+    expect(invoices.count).to eq 1
+  end
 end

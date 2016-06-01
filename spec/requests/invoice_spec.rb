@@ -47,10 +47,9 @@ describe "Invoice" do
 
     get "/api/v1/invoices/find?status=pending"
 
-    expect(response.status).to eq 200
-
     invoice = JSON.parse(response.body)
 
+    expect(response.status).to eq 200
     expect(invoice["id"]).to eq 1
     expect(invoice["status"]).to eq "pending"
   end
@@ -78,12 +77,23 @@ describe "Invoice" do
 
     get "/api/v1/invoices/find_all?status=pending"
 
-    expect(response.status).to eq 200
-
     result = JSON.parse(response.body)
 
+    expect(response.status).to eq 200
     expect(result.count).to eq 2
     expect(result.first["status"]).to eq "pending"
     expect(result.last["status"]).to eq "pending"
+  end
+
+  it "returns a collection of associated transactions" do
+    invoice = create(:invoice)
+   # merchant = create(:merchant)
+   # customer = create(:customer)
+   # invoice = customer.invoices.create(merchant_id: merchant.id)
+    transaction = invoice.transactions.create(credit_card_number: "1234", credit_card_expiration_date: "11/21", result: "success!!!")
+    get "/api/v1/invoices/:id/transactions"
+
+    result = JSON.parse(response.body)
+    expect(response.status).to eq 200
   end
 end
