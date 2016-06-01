@@ -11,7 +11,13 @@ Rails.application.routes.draw do
 
       resources :invoice_items, only: [:index, :show]
 
-      resources :transactions, only: [:index, :show]
+      resources :transactions, only: [:index, :show] do
+        collection do
+          get "find"
+          get "find_all"
+          #get "random"
+        end
+      end
     end
   end
 end

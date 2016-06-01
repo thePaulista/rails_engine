@@ -10,6 +10,16 @@ module Api
       def show
         respond_with Invoice.find(params[:id])
       end
+
+      def find
+        respond_with Invoice.find(invoice_params)
+      end
+
+      private
+
+      def invoice_params
+        params.permit(:id, :customer_id, :merchant_id, :status, :create_at, :updated_at)
+      end
     end
   end
 end
