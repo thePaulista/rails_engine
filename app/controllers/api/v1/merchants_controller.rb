@@ -19,6 +19,10 @@ module Api
         respond_with Merchant.where(merchant_params)
       end
 
+      def random
+        respond_with Merchant.limit(1).order("RANDOM()")
+      end
+
       private
 
       def merchant_params

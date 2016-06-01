@@ -1,38 +1,79 @@
 require 'rails_helper'
 
-#describe Api::V1::MerchantsController do
-#  before(:each) do
-#    merchant1, merchant2 = create_list(:merchant, 2)
-#    #Merchant.create(name: "Another merchant")
-#    #@merchant = Merchant.create(name: "Jones and Company")
-#  end
-#
-#  describe "Get index" do
-#    it "shows all merchants" do
-#      get "/api/v1/merchants",  format: :json
-#      merchants = JSON.parse(response.body, symbolize_names: true)
-#
-#      expect(response).to have_http_status(:success)
-#      expect(merchants.first[:name]).to eq ""
-#      expect(merchants.last[:name]).to eq "Jones and Company"
-#    end
-#  end
-#end
 RSpec.describe "Merchant API" do
   context "GET api/v1/merchant" do
     it "returns all the merchants" do
-      merchant1 = Merchant.create(name: 'Merchant1')
-      merchant2 = Merchant.create(name: 'Merchant2')
+      merchant1 = Merchant.create(name: 'Venice')
+      merchant2 = Merchant.create(name: 'Verona')
 
-      get "/api/v1/merchants", {}, { "Accept" => "application/json" }
+      get "/api/v1/merchants"
 
       expect(response.status).to eq 200
 
-      body = JSON.parse(response.body)
-      merchant_names = body.map { |m| m["name"] }
+      merchants = JSON.parse(response.body)
 
-      expect(merchant_names).to match_array(["Merchant1",
-                                             "Merchant2"])
+      expect(merchants.count).to eq(2)
     end
   end
+
+  it "returns one merchant" do
+    merchant = Merchant.create!(name: "Venice")
+
+    get "/api/v1/merchants/#{merchant.id}"
+
+    merchant = JSON.parse(response.body)
+    expect(response.status).to eq 200
+    expect(merchant["name"]).to eq "Venice"
+    expect(merchant["id"]).to eq 1
   end
+
+  it "returns merchant by name" do
+    merchant = Merchant.create!(name: "Verona")
+
+    get "/api/v1/merchants/find?name=Verona"
+
+    expect(response.status).to eq 200
+
+    merchant = JSON.parse(response.body)
+
+    expect(merchant["name"]).to eq "Verona"
+  end
+
+  it "returns name with case insensitive with spaces" do
+    merchant = Merchant.create!(name: "Piper scout and Marty")
+
+    get "/api/v1/merchants/find?name=Piper%20scout%20and%20Marty"
+
+    expect(response.status).to eq 200
+
+    merchant = JSON.parse(response.body)
+
+    expect(merchant["name"]).to eq "Piper scout and Marty"
+  end
+
+  it "returns a random merchant" do
+    merchant1 = Merchant.create!(name: "Venice")
+    merchant2 = Merchant.create!(name: "Piper scout and Marty")
+    merchant3 = Merchant.create!(name: "Verona")
+
+    get "/api/v1/merchants/random"
+
+    expect(response.status).to eq 200
+  end
+
+  it "returns all merchant by the same params" do
+    merchant1 = Merchant.create!(name: "Venice")
+    merchant2 = Merchant.create!(name: "Piper scout and Marty")
+    merchant3 = Merchant.create!(name: "Venice")
+
+    get "/api/v1/merchants/find_all?name=Venice"
+
+    expect(response.status).to eq 200
+
+    result = JSON.parse(response.body)
+
+    expect(result.count).to eq 2
+    expect(result.first["name"]).to eq "Venice"
+    expect(result.last["name"]).to eq "Venice"
+  end
+end
