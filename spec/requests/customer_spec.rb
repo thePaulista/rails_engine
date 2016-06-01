@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Customer API" do
+describe "Customer" do
   context "GET api/v1/customer" do
     it "returns all the customer" do
       customer1 = Customer.create(first_name: 'Venice', last_name: "Shakes")

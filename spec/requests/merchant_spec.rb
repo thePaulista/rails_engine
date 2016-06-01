@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Merchant API" do
+describe "Merchant" do
   context "GET api/v1/merchant" do
     it "returns all the merchants" do
       merchant1 = Merchant.create(name: 'Venice')
@@ -74,6 +74,7 @@ RSpec.describe "Merchant API" do
 
     expect(result.count).to eq 2
     expect(result.first["name"]).to eq "Venice"
+    expect(result.last["name"]).to eq "Venice"
     expect(result.last["name"]).to eq "Venice"
   end
 end
