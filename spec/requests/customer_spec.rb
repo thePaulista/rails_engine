@@ -56,10 +56,13 @@ describe "Customer" do
     customer1 = Customer.create!(first_name: "Piper", last_name: "Shakes")
     customer2 = Customer.create!(first_name: "Scout", last_name: "Macbeth")
     customer3 = Customer.create!(first_name: "Marty", last_name: "Peare")
+    customers = [customer1["id"], customer2["id"], customer3["id"]]
 
     get "/api/v1/customers/random"
+    random_customer = JSON.parse(response.body)
 
     expect(response.status).to eq 200
+    expect(customers).to include(random_customer[0]["id"])
   end
 
   it "returns all customer by the same params" do

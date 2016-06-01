@@ -12,11 +12,15 @@ module Api
       end
 
       def find
-        respond_with InvoiceItem.find(invoice_items_params)
+        respond_with InvoiceItem.find_by(invoice_items_params)
       end
 
       def find_all
         respond_with InvoiceItem.where(invoice_items_params)
+      end
+
+      def random
+        respond_with InvoiceItem.limit(1).order("RANDOM()")
       end
 
       private

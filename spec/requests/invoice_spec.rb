@@ -41,27 +41,34 @@ describe "Invoice" do
     expect(invoice["status"]).to eq "pending"
   end
 
-  xit "returns name with case insensitive with spaces" do
-    invoice = Invoice.create!(first_name: "Piper", last_name: "Shakes")
+  it "returns name with case insensitive with spaces" do
+    customer = create(:customer)
+    invoice = Invoice.create!(id: 1, customer_id: customer.id, status: "pending")
 
-    get "/api/v1/invoices/find?fist_name=Piper"
+    get "/api/v1/invoices/find?status=pending"
 
     expect(response.status).to eq 200
 
     invoice = JSON.parse(response.body)
 
-    expect(invoice["first_name"]).to eq "Piper"
-    expect(invoice["last_name"]).to eq "Shakes"
+    expect(invoice["id"]).to eq 1
+    expect(invoice["status"]).to eq "pending"
   end
 
-  xit "returns a random invoice" do
-    invoice1 = Invoice.create!(first_name: "Piper", last_name: "Shakes")
-    invoice2= Invoice.create!(first_name: "Scout", last_name: "Macbeth")
-    invoice3= Invoice.create!(first_name: "Marty", last_name: "Peare")
+  it "returns a random invoice" do
+    customer1, customer2, customer3 = create_list(:customer, 3)
+    invoice1 = Invoice.create!(id: 1, customer_id: customer1.id)
+    invoice2= Invoice.create!(id: 2, customer_id: customer2.id)
+    invoice3= Invoice.create!(id: 3, customer_id: customer2.id)
+    invoices = [invoice1["id"], invoice2["id"], invoice3["id"]]
 
     get "/api/v1/invoices/random"
 
+    random_invoice = JSON.parse(response.body)
+
     expect(response.status).to eq 200
+    expect(random_invoice.count).to eq 1
+    expect(invoices).to include(random_invoice[0]["id"])
   end
 
   xit "returns all invoice by the same params" do
