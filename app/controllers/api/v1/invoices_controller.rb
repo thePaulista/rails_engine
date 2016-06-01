@@ -15,6 +15,11 @@ module Api
         respond_with Invoice.find_by(invoice_params)
       end
 
+
+      def find_all
+        respond_with Invoice.where(invoice_params)
+      end
+
       def random
         respond_with Invoice.limit(1).order("RANDOM()")
       end

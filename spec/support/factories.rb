@@ -15,6 +15,13 @@ FactoryGirl.define do
     sequence(:status) {|n| "pending" }
   end
 
+  factory :invoice_item do |n|
+    sequence(:quantity) { "1" }
+    sequence(:unit_price) { 10 }
+    item
+    invoice
+  end
+
   factory :item do |n|
     sequence(:name) {|n| "coxinha #{n}" }
     sequence(:description) {|n| "last_name #{n}" }
@@ -28,5 +35,7 @@ FactoryGirl.define do
     sequence(:result) { "successfull" }
     invoice
   end
+
+
 end
 

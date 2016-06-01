@@ -71,19 +71,19 @@ describe "Invoice" do
     expect(invoices).to include(random_invoice[0]["id"])
   end
 
-  xit "returns all invoice by the same params" do
-    invoice1 = Invoice.create!(first_name: "Piper", last_name: "Shakes")
-    invoice2 = Invoice.create!(first_name: "Scout", last_name: "Macbeth")
-    invoice3 = Invoice.create!(first_name: "Piper", last_name: "Shakes")
+  it "returns all invoice by the same params" do
+    invoice1 = create(:invoice, status: "pending")
+    invoice2 = create(:invoice, status: "completed")
+    invoice3 = create(:invoice, status: "pending")
 
-    get "/api/v1/invoices/find_all?first_name=Piper"
+    get "/api/v1/invoices/find_all?status=pending"
 
     expect(response.status).to eq 200
 
     result = JSON.parse(response.body)
 
     expect(result.count).to eq 2
-    expect(result.first["first_name"]).to eq "Piper"
-    expect(result.last["first_name"]).to eq "Piper"
+    expect(result.first["status"]).to eq "pending"
+    expect(result.last["status"]).to eq "pending"
   end
 end

@@ -27,7 +27,7 @@ describe "Transaction" do
     expect(transaction["result"]).to eq "successfull"
   end
 
-  it "returns transaction by name" do
+  it "returns transaction by status" do
     transaction = create(:transaction)
 
     get "/api/v1/transactions/find?result=successfull"
@@ -39,22 +39,20 @@ describe "Transaction" do
     expect(transaction["result"]).to eq "successfull"
   end
 
-  xit "returns name with case insensitive with spaces" do
-    transaction = Transaction.create!(name: "Piper scout and Marty")
+  it "returns credit card expiration date"  do
+    transaction = create(:transaction, credit_card_expiration_date: "11/17")
 
-    get "/api/v1/transactions/find?name=Piper%20scout%20and%20Marty"
+    get "/api/v1/transactions/find?credit_card_expiration_date=11/17"
 
     expect(response.status).to eq 200
 
     transaction = JSON.parse(response.body)
 
-    expect(transaction["name"]).to eq "Piper scout and Marty"
+    expect(transaction["credit_card_expiration_date"]).to eq "11/17"
   end
 
-  xit "returns a random transaction" do
-    transaction1 = Transaction.create!(name: "Venice")
-    transaction2 = Transaction.create!(name: "Piper")
-    transaction3 = Transaction.create!(name: "Verona")
+  it "returns a random transaction" do
+    transaction1, transaction2, transaction3 = create_list(:transaction, 3)
     transactions = [transaction1["id"], transaction2["id"], transaction3["id"]]
 
     get "/api/v1/transactions/random"
@@ -65,19 +63,19 @@ describe "Transaction" do
     expect(transactions).to include(random_transaction[0]["id"])
   end
 
-  xit "returns all transaction by the same params" do
-    transaction1 = Transaction.create!(name: "Venice")
-    transaction2 = Transaction.create!(name: "Piper scout and Marty")
-    transaction3 = Transaction.create!(name: "Venice")
+  it "returns all transaction by the same params" do
+    transaction1 = create(:transaction, result: "successfull")
+    transaction2 = create(:transaction, result: "pending")
+    transaction3 = create(:transaction, result: "successfull")
 
-    get "/api/v1/transactions/find_all?name=Venice"
+    get "/api/v1/transactions/find_all?result=successfull"
 
     expect(response.status).to eq 200
 
     result = JSON.parse(response.body)
 
     expect(result.count).to eq 2
-    expect(result.first["name"]).to eq "Venice"
-    expect(result.last["name"]).to eq "Venice"
+    expect(result.first["result"]).to eq "successfull"
+    expect(result.last["result"]).to eq "successfull"
   end
 end
