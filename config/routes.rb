@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
       resources :customers, only: [:index, :show] do
         collection do
-          get "/find", to: "customer#find"
+          get "/find", to: "customers#find"
           get "/find_all", to: "customers#find_all"
           get "/random", to: "customers#random"
         end
