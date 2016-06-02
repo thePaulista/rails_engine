@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       end
 
       get "invoices/:id/transactions", to: "invoices/transactions#index"
+      get "invoices/:id/invoice_items", to: "invoices/invoice_items#index"
 
       resources :items, only: [:index, :show] do
         collection do
@@ -53,6 +54,7 @@ Rails.application.routes.draw do
           get "random", to: "transactions#random"
         end
       end
+      get "transactions/:id/invoice", to: "transactions/invoices#show"
     end
   end
 end

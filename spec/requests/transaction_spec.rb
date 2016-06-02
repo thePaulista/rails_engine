@@ -78,4 +78,20 @@ describe "Transaction" do
     expect(result.first["result"]).to eq "successfull"
     expect(result.last["result"]).to eq "successfull"
   end
+
+  it "returns a collection of associated invoices" do
+    customer1, customer2 = create_list(:customer, 2)
+    merchant1, merchant2 = create_list(:merchant, 2)
+    invoice1 = merchant1.invoices.create!(customer_id: customer1.id)
+    invoice2 = merchant2.invoices.create!(customer_id: customer2.id)
+    transaction1 = invoice1.transactions.create!(credit_card_number: "1234")
+    transaction2 = invoice2.transactions.create!(credit_card_number: "2345")
+
+    get "/api/v1/transactions/#{transaction2.id}/invoice"
+
+    transaction2 = JSON.parse(response.body)
+    expect(response.status).to eq 200
+    #expect(transaction2[0]["id"]).to eq transaction2.id
+  end
+
 end

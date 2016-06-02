@@ -86,14 +86,41 @@ describe "Invoice" do
   end
 
   it "returns a collection of associated transactions" do
-    invoice = create(:invoice)
-   # merchant = create(:merchant)
-   # customer = create(:customer)
-   # invoice = customer.invoices.create(merchant_id: merchant.id)
-    transaction = invoice.transactions.create(credit_card_number: "1234", credit_card_expiration_date: "11/21", result: "success!!!")
-    get "/api/v1/invoices/:id/transactions"
+   customer1, customer2 = create_list(:customer, 2)
+   merchant1, merchant2 = create_list(:merchant, 2)
+   invoice1 = merchant1.invoices.create!(customer_id: customer1.id)
+   invoice2 = merchant2.invoices.create!(customer_id: customer2.id)
+   invoice1.transactions.create!(credit_card_number: "1234", credit_card_expiration_date: "11/20", result: "success!!!!!!!")
+   invoice1.transactions.create!(credit_card_number: "2234", credit_card_expiration_date: "11/20", result: "success!!!!!!!")
+   invoice2.transactions.create!(credit_card_number: "4321", credit_card_expiration_date: "11/20", result: "shucks!!!!!!!")
 
-    result = JSON.parse(response.body)
+   get "/api/v1/invoices/#{invoice1.id}/transactions"
+
+    transactions = JSON.parse(response.body)
+
     expect(response.status).to eq 200
+    expect(transactions.count).to eq 2
+    expect(transactions[0]["invoice_id"]).to eq invoice1.id
+    expect(transactions[1]["invoice_id"]).to eq invoice1.id
   end
+
+  it "returns a collection of invoice items" do
+    #customer1, customer2 = create_list(:customer, 2)
+    #merchant1, merchant2 = create_list(:merchant, 2)
+    item1, item2 = create_list(:item, 2)
+    invoice1, invoice2 = create_list(:invoice, 2)
+    invoice1.invoice_items.create!(item_id: item1.id)
+    invoice2.invoice_items.create(item_id: item2.id, unit_price: 10.00)
+    invoice2.invoice_items.create(item_id: item1.id, unit_price: 10.00)
+
+    get "/api/v1/invoices/#{invoice2.id}/invoice_items"
+
+    invoice_item = JSON.parse(response.body)
+
+    expect(response.status).to eq 200
+    expect(invoice_item.count).to eq 2
+    expect(invoice_item[0]["invoice_id"]).to eq invoice2.id
+    expect(invoice_item[1]["invoice_id"]).to eq invoice2.id
+  end
+
 end
