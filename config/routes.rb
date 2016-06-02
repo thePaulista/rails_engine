@@ -27,9 +27,11 @@ Rails.application.routes.draw do
           get "/random", to: "invoices#random"
         end
       end
-
       get "invoices/:id/transactions", to: "invoices/transactions#index"
       get "invoices/:id/invoice_items", to: "invoices/invoice_items#index"
+      get "invoices/:id/items", to: "invoices/items#index"
+      get "invoices/:id/customer", to: "invoices/customers#show"
+      get "invoices/:id/merchant", to: "invoices/merchants#show"
 
       resources :items, only: [:index, :show] do
         collection do

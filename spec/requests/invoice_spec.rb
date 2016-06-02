@@ -123,4 +123,49 @@ describe "Invoice" do
     expect(invoice_item[1]["invoice_id"]).to eq invoice2.id
   end
 
+  it "returns a collection of items" do
+   invoice1, invoice2 = create_list(:invoice, 2)
+
+   invoice1.items.create!(name: "Coxinha", description: "So yummy", unit_price: "5.00")
+   invoice2.items.create!(name: "Esfiha", description: "Second best stuff", unit_price: "5.00")
+   invoice2.items.create!(name: "Pastel Especial", description: "Delicious only when freshly fried", unit_price: "6.00")
+
+   get "/api/v1/invoices/#{invoice2.id}/items"
+
+   items = JSON.parse(response.body)
+
+   expect(response.status).to eq 200
+   expect(items.count).to eq 2
+   expect(items[0]["name"]).to eq "Esfiha"
+   expect(items[1]["name"]).to eq "Pastel Especial"
+  end
+
+  it "returns an associated customer" do
+    merchant1, merchant2 = create_list(:merchant, 2)
+    customer1, customer2 = create_list(:customer, 2)
+    invoice1 = customer1.invoices.create!(merchant_id: merchant1.id, status: "shipped" )
+    invoice2 = customer2.invoices.create!(merchant_id: merchant2.id, status: "shipped")
+
+    get "/api/v1/invoices/#{invoice1.id}/customer"
+
+    customer = JSON.parse(response.body)
+
+    expect(response.status).to eq 200
+    expect(customer["first_name"]).to eq customer1.first_name
+    expect(customer["last_name"]).to eq customer1.last_name
+   end
+
+  it "returns an associated merchant" do
+    merchant1, merchant2 = create_list(:merchant, 2)
+    customer1, customer2 = create_list(:customer, 2)
+    invoice1 = customer1.invoices.create!(merchant_id: merchant1.id, status: "pending")
+    invoice2 = customer2.invoices.create!(merchant_id: merchant2.id, status: "pending")
+
+    get "/api/v1/invoices/#{invoice2.id}/merchant"
+
+    merchant = JSON.parse(response.body)
+
+    expect(response.status).to eq 200
+    expect(merchant["name"]).to eq merchant2.name
+   end
 end
