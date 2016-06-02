@@ -80,4 +80,22 @@ describe "Customer" do
     expect(result.first["first_name"]).to eq "Piper"
     expect(result.last["first_name"]).to eq "Piper"
   end
+
+  it "returns a collection of associated invoices" do
+    merchant1, merchant2, merchant3 = create_list(:merchant, 3)
+    customer1, customer2 = create_list(:customer, 2)
+    invoice1 = customer1.invoices.create!(merchant_id: merchant1.id, status: "pending")
+    invoice2 = customer2.invoices.create!(merchant_id: merchant2.id, status: "pending")
+    invoice3 = customer2.invoices.create!(merchant_id: merchant3.id, status: "pending")
+
+
+    get "/api/v1/customers/#{customer2.id}/invoices"
+
+    invoices = JSON.parse(response.body)
+
+    expect(response.status).to eq 200
+    expect(invoices.count).to eq 2
+    expect(invoices[0]["customer_id"]).to eq customer2.id
+    expect(invoices[1]["customer_id"]).to eq customer2.id
+   end
 end

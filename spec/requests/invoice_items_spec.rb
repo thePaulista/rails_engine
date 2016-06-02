@@ -53,7 +53,7 @@ describe "Invoice Items" do
     expect(invoice_items).to include(random_invoice_item[0]["id"])
   end
 
-  xit "returns all invoice items by the same params" do
+  it "returns all invoice items by the same params" do
     invoice_item1 = create(:invoice_item, quantity: "1")
     invoice_item2 = create(:invoice_item, quantity: "3")
     invoice_item3 = create(:invoice_item, quantity: "1")
@@ -63,8 +63,38 @@ describe "Invoice Items" do
     result = JSON.parse(response.body)
 
     expect(response.status).to eq 200
-    expect(result.count).to eq 2
     expect(result.first["quantity"]).to eq "1"
     expect(result.last["quantity"]).to eq "1"
   end
+
+  it "returns the associated invoice" do
+    customer1, customer2 = create_list(:customer, 2)
+    merchant1, merchant2 = create_list(:merchant, 2)
+    item1, item2 = create_list(:item, 2)
+    invoice1, invoice2 = create_list(:invoice, 2)
+    invoice_item1 = invoice1.invoice_items.create!(item_id: item1.id)
+    invoice_item2 = invoice2.invoice_items.create(item_id: item2.id, unit_price: 10.00)
+
+    get "/api/v1/invoice_items/#{invoice_item2.id}/invoice"
+
+    invoice = JSON.parse(response.body)
+
+    expect(response.status).to eq 200
+    expect(invoice["id"]).to eq invoice_item2.invoice_id
+  end
+
+  it "returns the associated item" do
+    item1, item2 = create_list(:item, 2)
+    invoice1, invoice2 = create_list(:invoice, 2)
+    invoice_item1 = invoice1.invoice_items.create(item_id: item1.id, quantity: 10, unit_price: 10.00)
+    invoice_item2 = invoice2.invoice_items.create(item_id: item2.id, quantity: 10, unit_price: 10.00)
+
+    get "/api/v1/invoice_items/#{invoice_item2.id}/item"
+
+    item = JSON.parse(response.body)
+
+    expect(response.status).to eq 200
+    expect(item["id"]).to eq invoice_item2.item["id"]
+  end
 end
+

@@ -76,5 +76,34 @@ describe "Items" do
       expect(result.first["name"]).to eq "Venice"
       expect(result.last["name"]).to eq "Venice"
     end
+
+    it "returns a collection of associated invoice items" do
+      item1, item2, item3 = create_list(:item, 3)
+      invoice1, invoice2, invoice3 = create_list(:invoice, 3)
+      item1.invoice_items.create(invoice_id: invoice1.id, quantity: 10, unit_price: 10.00)
+      item2.invoice_items.create(invoice_id: invoice2.id, quantity: 10, unit_price: 10.00)
+      item2.invoice_items.create(invoice_id: invoice3.id, quantity: 10, unit_price: 10.00)
+
+      get "/api/v1/items/#{item2.id}/invoice_items"
+
+      invoice_items = JSON.parse(response.body)
+
+      expect(response.status).to eq 200
+      expect(invoice_items[0]["item_id"]).to eq item2.id
+      expect(invoice_items[1]["item_id"]).to eq item2.id
+      expect(invoice_items.count).to eq 2
+    end
+
+    it "returns the associated  merchant" do
+      merchant1, merchant2 = create_list(:merchant, 2)
+      item1 = merchant1.items.create(name: "lemon", description: "lemony", unit_price: 10.00)
+      item2 = merchant2.items.create(name: "coxinha", description: "chickeny", unit_price: 50.00)
+
+      get "/api/v1/items/#{item1.id}/merchant"
+
+      merchant = JSON.parse(response.body)
+
+      expect(response.status).to eq 200
+    end
   end
 end
