@@ -7,6 +7,8 @@ FactoryGirl.define do
 
   factory :merchant do |n|
     sequence(:name) {|n| "Piper #{n}" }
+    sequence(:created_at) { "2016-05-08 00:33:59 UTC" }
+    sequence(:updated_at) { "2016-05-08 00:33:59 UTC" }
   end
 
   factory :invoice do |n|

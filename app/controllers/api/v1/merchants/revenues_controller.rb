@@ -2,7 +2,11 @@ module Api
   module V1
     class Merchants::RevenuesController < ApiController
       def show
-        respond_with Merchant.find(params[:id]).revenue
+        if params[:date]
+          respond_with Merchant.find(params[:id]).revenue_by_date(params[:date])
+        else
+          respond_with Merchant.find(params[:id]).revenue
+        end
       end
 
       def favorite_customer_show

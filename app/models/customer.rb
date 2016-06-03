@@ -4,10 +4,10 @@ class Customer < ActiveRecord::Base
   has_many :transactions, through: :invoices
 
   def favorite_merchant
-    merchants.select("merchants.*, count(invoices.merchant_id) AS invoice_count")
+    merchants.select("merchants.*, count(invoices.merchant_id) AS inv_count")
                         .joins(invoices: :transactions)
                         .group("merchants.id")
-                        .order("invoice_count DESC")
+                        .order("inv_count DESC")
                         .first
   end
 end
