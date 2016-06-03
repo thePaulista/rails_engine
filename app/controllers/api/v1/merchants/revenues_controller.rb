@@ -16,6 +16,10 @@ module Api
       def customers_with_pending_invoices_show
         respond_with Merchant.find(params[:id]).customers_with_pending_invoices
       end
+
+      def revenue_by_date_index
+        respond_with Merchant.revenue(params[:quantity])
+      end
     end
   end
 end

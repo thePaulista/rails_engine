@@ -31,6 +31,10 @@ module Api
         respond_with Merchant.most_items(params[:quantity])
       end
 
+      def revenue_by_date_index
+        respond_with Merchant.revenue(params[:date])
+      end
+
       private
 
       def merchant_params

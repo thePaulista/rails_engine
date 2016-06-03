@@ -1,7 +1,6 @@
 module Api
   module V1
     class InvoiceItemsController < ApiController
-      respond_to  :json
 
       def index
         respond_with InvoiceItem.all
@@ -26,7 +25,7 @@ module Api
       private
 
       def invoice_items_params
-        params.permit(:id, :customer_id, :merchant_id, :status, :created_at, :updated_at)
+        params.permit(:id, :item_id, :invoice_id, :quantity, :unit_price, :created_at, :updated_at)
       end
     end
   end

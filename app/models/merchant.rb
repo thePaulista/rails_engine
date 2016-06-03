@@ -21,6 +21,7 @@ class Merchant < ActiveRecord::Base
   end
 
   def revenue_by_date(date)
+    date ? invoices = Invoice.where(created_at: date) : invoices = Invoice
     rev = invoices
       .joins(:transactions, :invoice_items)
       .where(transactions: { result: "success" })
@@ -35,7 +36,7 @@ class Merchant < ActiveRecord::Base
       .joins(invoices: :transactions)
       .where(transactions: { result: "success" })
       .group("customers.id")
-      .order("invoice_count DESC")
+      .order("invoice_count desc")
       .first
   end
 
@@ -53,5 +54,13 @@ class Merchant < ActiveRecord::Base
       .group("merchants.id")
       .order("item_count desc")
       .limit(quantity)
-end
+  end
+
+  def self.revenue(date)
+    date ? invoices = Invoice.where(created_at: date) : invoices = Invoice
+    Invoice.joins(:transactions, :invoice_items)
+      .where(transactions: { results:  "success" })
+      .where(invoices: { created_at: date } )
+      .sum("invoice_items.unit_price * invoice_items.quantity")
+  end
 end

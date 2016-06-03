@@ -19,16 +19,16 @@ Rails.application.routes.draw do
           get "/find", to: "merchants#find"
           get "/find_all", to: "merchants#find_all"
           get "/random", to: "merchants#random"
-         get "/most_items", to: "merchants#most_items_index"
-         get "/most_revenue", to: "merchants#top_merchants_index"
+          get "/most_items", to: "merchants#most_items_index"
+          get "/most_revenue", to: "merchants#top_merchants_index"
         end
       end
-        get "merchants/:id/items", to: "merchants/items#index"
-        get "merchants/:id/invoices", to: "merchants/invoices#index"
-        get "merchants/:id/revenue", to: "merchants/revenues#show"
-        get "merchants/:id/favorite_customer", to: "merchants/revenues#favorite_customer_show"
-        get "merchants/:id/customers_with_pending_invoices", to: "merchants/revenues#customers_with_pending_invoices_show"
-
+      get "merchants/:id/items", to: "merchants/items#index"
+      get "merchants/:id/invoices", to: "merchants/invoices#index"
+      get "merchants/:id/revenue", to: "merchants/revenues#show"
+      get "merchants/:id/favorite_customer", to: "merchants/revenues#favorite_customer_show"
+      get "merchants/:id/customers_with_pending_invoices", to: "merchants/revenues#customers_with_pending_invoices_show"
+      get "merchants/revenues", to: "merchants/revenues#revenue_by_date_index"
 
       resources :invoices, only: [:index, :show] do
         collection do
