@@ -23,6 +23,14 @@ module Api
         respond_with Merchant.limit(1).order("RANDOM()")
       end
 
+      def top_merchants_index
+        respond_with Merchant.most_revenue(params[:quantity])
+      end
+
+      def most_items_index
+        respond_with Merchant.most_items(params[:quantity])
+      end
+
       private
 
       def merchant_params

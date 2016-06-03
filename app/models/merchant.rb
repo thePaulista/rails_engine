@@ -6,18 +6,28 @@ class Merchant < ActiveRecord::Base
   has_many :transactions, through: :invoices
 
   def revenue
-    invoices.
+    rev = invoices.
       joins(:invoice_items, :transactions).
       where(transactions: {result: "success"}).
       sum("invoice_items.quantity * invoice_items.unit_price")
+    { revenue: rev }
+  end
+
+  def self.most_revenue(quantity)
+    joins(:invoice_items)
+      .group(:id)
+      .order("sum(invoice_items.quantity * invoice_items.unit_price) DESC")
+      .limit(quantity)
   end
 
   def revenue_by_date(date)
-    invoices
+    rev = invoices
       .joins(:transactions, :invoice_items)
-      .where(invoices: { created_at: date })
       .where(transactions: { result: "success" })
+      .where(invoices: { created_at: date })
       .sum("invoice_items.unit_price * invoice_items.quantity")
+
+    { "revenue" => rev }
   end
 
   def favorite_customer
@@ -34,6 +44,14 @@ class Merchant < ActiveRecord::Base
       invoices.joins(:transactions)
       .where(transactions: { result: "failed" })
       .pluck(:customer_id)
-    Customer.find(customer_id)
+    Customer.where(id: customer_id)
   end
+
+  def self.most_items(quantity)
+    select("merchants.*, sum(invoice_items.quantity) as item_count")
+      .joins(:invoice_items)
+      .group("merchants.id")
+      .order("item_count desc")
+      .limit(quantity)
+end
 end

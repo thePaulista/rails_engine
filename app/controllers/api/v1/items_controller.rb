@@ -23,6 +23,10 @@ module Api
         respond_with Item.limit(1).order("RANDOM()")
       end
 
+      def best_day_show
+        respond_with Item.find(params[:id]).best_day
+      end
+
       private
 
       def item_params

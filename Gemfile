@@ -36,6 +36,7 @@ group :development, :test do
   gem 'pry'
   gem 'database_cleaner'
   gem 'shoulda-matchers', github: 'thoughtbot/shoulda-matchers'
+  gem 'simplecov', :require => false, :group => :test
   gem "factory_girl_rails", "~>4.0"
 end
 
