@@ -21,7 +21,7 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'responders'
-#
+#gem 'activerecord-postgresql-citext'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 gem 'active_model_serializers', '~> 0.10.0'
@@ -38,6 +38,7 @@ group :development, :test do
   gem 'shoulda-matchers', github: 'thoughtbot/shoulda-matchers'
   gem 'simplecov', :require => false, :group => :test
   gem "factory_girl_rails", "~>4.0"
+  gem 'shoulda-callback-matchers', '~> 1.1', '>= 1.1.3'
 end
 
 group :development do

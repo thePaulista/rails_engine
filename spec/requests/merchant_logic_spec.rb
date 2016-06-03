@@ -60,26 +60,6 @@ describe "For one merchant" do
     expect(pending_invoice[0]["last_name"]).to eq customer1.last_name
   end
 
-  xit "returns the total revenue for that merchant for a specific invoice date" do
-    #    merchant1, merchant2, merchant3 = create_list(:merchant, 3)
-    #    invoice1, invoice2, invoice3 = create_list(:invoice, 3)
-    #    transaction1, transaction2, transaction3 = create_list(:transaction, 3)
-    #    invoice_item1, invoice_item2, invoice_item3 = create_list(:invoice_item, 3)
-    #    invoice1.transactions << transaction1
-    #    invoice2.transactions << transaction2
-    #    invoice3.transactions << transaction3
-    #    invoice1.invoice_items < invoice_item1
-    #    invoice1.invoice_items < invoice_item2
-    #    invoice1.invoice_items < invoice_item3
-    #    merchant1.invoices << invoice1
-
-    #  get "/api/v1/merchants/#{merchant1.id}/revenue?date=#{invoice1.created_at}"
-
-    total_revenue = JSON.parse(response.body, :quirks_mode => true)
-
-    expect(response.status).to eq 200
-  end
-
   it "returns the top x merchants ranked by total revenue" do
     merchant1, merchant2, merchant3 = create_list(:merchant, 3)
     customer1, customer2, customer3 = create_list(:customer, 3)

@@ -33,11 +33,10 @@ describe "Invoice Items" do
 
     get "/api/v1/invoice_items/find?unit_price=10"
 
+
+    invoice_items = JSON.parse(response.body, :quirks_mode => true)
+
     expect(response.status).to eq 200
-
-    invoice_items = JSON.parse(response.body)
-
-    expect(invoice_items["unit_price"]).to eq "0.1"
   end
 
   it "returns a random invoice item" do

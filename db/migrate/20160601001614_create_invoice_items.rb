@@ -1,5 +1,7 @@
 class CreateInvoiceItems < ActiveRecord::Migration
   def change
+    enable_extension("citext")
+
     create_table :invoice_items do |t|
       t.integer :quantity
       t.decimal :unit_price
