@@ -7,9 +7,9 @@ Project spec can be found here.
 https://github.com/turingschool/lesson_plans/blob/master/ruby_03-professional_rails_applications/rails_engine.md
 
 To view this: 
-git clone 
-cd into  rails_engine
-bundle
-rake db:setup import
+git clone,
+cd into  rails_engine,
+bundle,
+rake db:setup import.
 
 I'm done!
