@@ -1,28 +1,15 @@
-== README
+This was a beast of a project! 
+Rails Engine is a reinvention by folks who are not so concerned to increase the happiness quotient of software students - obviously.  
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This app outputs a JSON API of ecommerce data, borne out of a module 1 project called Sales Engine, aka Black Thursday.
 
-Things you may want to cover:
+Project spec can be found here. 
+https://github.com/turingschool/lesson_plans/blob/master/ruby_03-professional_rails_applications/rails_engine.md
 
-* Ruby version
+To view this: 
+git clone,
+cd into  rails_engine,
+bundle,
+rake db:setup import.
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+I'm done!
