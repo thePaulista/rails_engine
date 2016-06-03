@@ -24,8 +24,8 @@ describe "Invoice Items" do
     invoice_item1 = JSON.parse(response.body)
 
     expect(response.status).to eq 200
-    expect(invoice_item1["quantity"]).to eq "1"
-    expect(invoice_item1["unit_price"]).to eq "10"
+    expect(invoice_item1["quantity"]).to eq 1
+    expect(invoice_item1["unit_price"]).to eq "0.1"
    end
 
   it "returns invoice by a singular params" do
@@ -37,7 +37,7 @@ describe "Invoice Items" do
 
     invoice_items = JSON.parse(response.body)
 
-    expect(invoice_items["unit_price"]).to eq "10"
+    expect(invoice_items["unit_price"]).to eq "0.1"
   end
 
   it "returns a random invoice item" do
@@ -63,8 +63,8 @@ describe "Invoice Items" do
     result = JSON.parse(response.body)
 
     expect(response.status).to eq 200
-    expect(result.first["quantity"]).to eq "1"
-    expect(result.last["quantity"]).to eq "1"
+    expect(result.first["quantity"]).to eq 1
+    expect(result.last["quantity"]).to eq 1
   end
 
   it "returns the associated invoice" do

@@ -80,7 +80,7 @@ describe "Merchant" do
     expect(result.last["name"]).to eq "Venice"
   end
 
-  it "returns all items belonging to a merchant" do
+  it "returns a collection of items associated to a merchant" do
     merchant1, merchant2 = create_list(:merchant, 2)
     merchant1.items.create(name: "lemon", description: "lemony", unit_price: 10.00)
     merchant1.items.create(name: "coriander", description: "corianderish", unit_price: 10.00)
@@ -103,5 +103,16 @@ describe "Merchant" do
 
     invoices = JSON.parse(response.body)
     expect(invoices.count).to eq 1
+  end
+
+
+  it "returns total revenue for that merchant across all transactions" do
+    item1, item2 = create_list(:item, 2)
+    merchant1, merchant2 = create_list(:merchant, 2)
+    customer1, customer2 = create_list(:customer, 2)
+    invoice1 = customer1.invoices.create(merchant_id: merchant1.id)
+    invoice2 = customer2.invoices.create(merchant_id: merchant2.id)
+    transaction1 = Transaction.create(invoice_id: invoice1.id, credit_card_number: "1234", result: "success")
+    invoice_item1 = InvoiceItem.create(item_id: item1.id, invoice_id: invoice1.id, quantity: 2, unit_price: 10)
   end
 end

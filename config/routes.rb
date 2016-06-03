@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
       get "customers/:id/invoices", to: "customers/invoices#index"
       get "customers/:id/transactions", to: "customers/transactions#index"
+      get "customers/:id/favorite_merchant", to: "customers/favorite_merchants#show"
 
       resources :merchants, only: [:index, :show] do
         collection do
@@ -20,8 +21,11 @@ Rails.application.routes.draw do
           get "/random", to: "merchants#random"
         end
       end
-        get "merchants/:id/items", to: "merchants/items#index" #merchants/id/items
-        get "merchants/:id/invoices", to: "merchants/invoices#index" #merchants/id/invoices
+        get "merchants/:id/items", to: "merchants/items#index"
+        get "merchants/:id/invoices", to: "merchants/invoices#index"
+        get "merchants/:id/revenue", to: "merchants/revenues#show"
+        get "merchants/:id/favorite_customer", to: "merchants/revenues#favorite_customer_show"
+        get "merchants/:id/customers_with_pending_invoices", to: "merchants/revenues#customers_with_pending_invoices_show"
 
       resources :invoices, only: [:index, :show] do
         collection do

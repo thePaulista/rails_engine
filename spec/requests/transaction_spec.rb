@@ -39,16 +39,16 @@ describe "Transaction" do
     expect(transaction["result"]).to eq "successfull"
   end
 
-  it "returns credit card expiration date"  do
-    transaction = create(:transaction, credit_card_expiration_date: "11/17")
+  it "returns credit card number"  do
+    transaction = create(:transaction, credit_card_number: "1117")
 
-    get "/api/v1/transactions/find?credit_card_expiration_date=11/17"
+    get "/api/v1/transactions/find?credit_card_number=1117"
 
     expect(response.status).to eq 200
 
     transaction = JSON.parse(response.body)
 
-    expect(transaction["credit_card_expiration_date"]).to eq "11/17"
+    expect(transaction["credit_card_number"]).to eq "1117"
   end
 
   it "returns a random transaction" do
