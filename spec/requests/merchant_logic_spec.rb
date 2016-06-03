@@ -75,7 +75,7 @@ describe "For one merchant" do
     top_merchants = JSON.parse(response.body)
 
     expect(response.status).to eq 200
-   # expect(top_merchants[0]["id"].to_i).to eq customer1.id
+    #expect(top_merchants[0]["id"].to_i).to eq customer1.id
   end
 end
 
